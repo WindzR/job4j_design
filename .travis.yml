@@ -6,6 +6,9 @@ jdk:
 # используем режим обычного пользователя для сборки проекта.
 sudo: false
 
+script:
+  - mvn test -B
+
 env:
   global:
     - CODECOV_TOKEN="166a6ea3-12c4-48e7-9868-f97278403915"
@@ -23,3 +26,5 @@ notifications:
       bodins@yandex.ru
     on_success: never # default: change
     on_failure: always # default: always
+
+
