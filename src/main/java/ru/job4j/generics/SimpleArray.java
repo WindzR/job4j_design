@@ -11,7 +11,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param index - счетчик добавленных/удаленных элементов
      */
     private T[] elements;
-    private int index;
+    private int index = 0;
 
     public SimpleArray(int size) {
         elements = (T[]) new Object[size];
@@ -53,6 +53,8 @@ public class SimpleArray<T> implements Iterable<T> {
         boolean rsl = false;
         if (Objects.checkIndex(removeIndex, index) >= 0) {
             System.arraycopy(elements, removeIndex + 1, elements, removeIndex, elements.length - removeIndex - 1);
+            elements[index] = null;
+            index--;
             rsl = true;
         }
         return rsl;
@@ -64,7 +66,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * @return Object - элемент массива, который хотим получить
      */
     public Object get(int getIndex) {
-        return Objects.checkIndex(getIndex, elements.length) >= 0 ? elements[getIndex] : null;
+        return Objects.checkIndex(getIndex, index + 1) >= 0 ? elements[getIndex] : null;
     }
 
     /**
