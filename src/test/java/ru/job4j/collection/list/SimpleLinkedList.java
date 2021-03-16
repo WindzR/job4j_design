@@ -1,8 +1,11 @@
-package ru.job4j.collection;
+package ru.job4j.collection.list;
 
-import java.util.*;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
-public class SimpleLinkedList<E> implements Iterable<E> {
+public class SimpleLinkedList<E> implements List<E> {
     private int size;
     private int modCount;
     private Node<E> first;
@@ -19,19 +22,21 @@ public class SimpleLinkedList<E> implements Iterable<E> {
         return size;
     }
 
+    @Override
     public void add(E value) {
         if (first == null) {
-            first = new Node<>(null, value, null);
+            first = new Node<E>(value, null);
             last = first;
         } else {
-            Node<E> node = new Node<>(last, value, null);
-            last.next = node;
+            Node<E> node = new Node<E>(value, null);
+            first.next = node;
             last = node;
         }
         size++;
         modCount++;
     }
 
+    @Override
     public E get(int index) {
         E result = null;
         if (Objects.checkIndex(index, size) >= 0) {
@@ -58,18 +63,24 @@ public class SimpleLinkedList<E> implements Iterable<E> {
 
             @Override
             public boolean hasNext() {
-                return currentNode.next != null;
+                return currentNode != null;
             }
 
             @Override
             public E next() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
+                checkModCount();
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return currentNode.item;
+                E result = currentNode.item;
+                currentNode = currentNode.next;
+                return result;
+            }
+
+            private void checkModCount() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
             }
         };
         return it;
@@ -78,12 +89,10 @@ public class SimpleLinkedList<E> implements Iterable<E> {
     private static class Node<E> {
         E item;
         Node<E> next;
-        Node<E> prev;
 
-        private Node(Node<E> prev, E element, Node<E> next) {
+        private Node(E element, Node<E> next) {
             this.item = element;
             this.next = next;
-            this.prev = prev;
         }
     }
 }
