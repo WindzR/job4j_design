@@ -29,7 +29,7 @@ public class SimpleLinkedList<E> implements List<E> {
             last = first;
         } else {
             Node<E> node = new Node<E>(value, null);
-            first.next = node;
+            last.next = node;
             last = node;
         }
         size++;
@@ -38,19 +38,18 @@ public class SimpleLinkedList<E> implements List<E> {
 
     @Override
     public E get(int index) {
-        E result = null;
-        if (Objects.checkIndex(index, size) >= 0) {
-            if (index == 0) {
-                result = first.item;
-            } else if (index == size - 1) {
-                result = last.item;
-            } else {
-                Node<E> nextNode = first.next;
-                for (int i = 1; i < index; i++) {
-                    nextNode = nextNode.next;
-                }
-                result = nextNode.item;
+        Objects.checkIndex(index, size);
+        E result;
+        if (index == 0) {
+            result = first.item;
+        } else if (index == size - 1) {
+            result = last.item;
+        } else {
+            Node<E> nextNode = first.next;
+            for (int i = 1; i < index; i++) {
+                nextNode = nextNode.next;
             }
+            result = nextNode.item;
         }
         return result;
     }
