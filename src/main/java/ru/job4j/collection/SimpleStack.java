@@ -5,7 +5,7 @@ public class SimpleStack<T> {
     private int size;
 
     public T pop() {
-        --size;
+        size--;
         return linked.deleteFirst();
     }
 
@@ -14,7 +14,7 @@ public class SimpleStack<T> {
         size++;
     }
 
-    public int getSize() {
-        return size;
+    public boolean isEmpty() {
+        return size == 0;
     }
 }
