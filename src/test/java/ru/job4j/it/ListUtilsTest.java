@@ -30,6 +30,13 @@ public class ListUtilsTest {
         assertThat(Arrays.asList(1, 2, 3, 4), Is.is(input));
     }
 
+    @Test
+    public void whenAddAfterLast() {
+        List<Integer> input = new ArrayList<>(Arrays.asList(1, 2, 4));
+        ListUtils.addAfter(input, 2, 5);
+        assertThat(Arrays.asList(1, 2, 4, 5), Is.is(input));
+    }
+
     @Test(expected = IndexOutOfBoundsException.class)
     public void whenAddAfterWithInvalidIndex() {
         List<Integer> input = new ArrayList<>(Arrays.asList(1, 2, 4));
