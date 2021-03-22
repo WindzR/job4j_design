@@ -18,6 +18,10 @@ public class SimpleArray<T> implements Iterable<T> {
         this.size = size;
     }
 
+    public int size() {
+        return size;
+    }
+
     public boolean add(T model) {
         if (index == container.length) {
             extendArray();
@@ -85,5 +89,24 @@ public class SimpleArray<T> implements Iterable<T> {
             }
         };
         return it;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        SimpleArray<?> that = (SimpleArray<?>) o;
+        return index == that.index && Arrays.equals(container, that.container);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(index);
+        result = 31 * result + Arrays.hashCode(container);
+        return result;
     }
 }
