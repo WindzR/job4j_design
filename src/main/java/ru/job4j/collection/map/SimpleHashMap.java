@@ -12,7 +12,7 @@ public class SimpleHashMap<K, V> implements Iterable<K> {
     private int modCount = 0;
 
     public SimpleHashMap() {
-        this.size = 16;
+        arraySize = 16;
         hashArray = new Item[16];
     }
 
@@ -22,12 +22,9 @@ public class SimpleHashMap<K, V> implements Iterable<K> {
     }
 
     public int hash(Object o) {
-        return o.hashCode() % arraySize;
+        int checkIndex = o.hashCode() % arraySize;
+        return o.hashCode() > 0 ? checkIndex : (-1) * checkIndex;
     }
-
-//    public int hashCode(Object o) {
-//        return o.hashCode();
-//    }
 
     private void extendArray() {
         arraySize = arraySize * 2;
@@ -61,12 +58,9 @@ public class SimpleHashMap<K, V> implements Iterable<K> {
         int index = hash(key);
         int keyHash = key.hashCode();
         Item<K, V> item = new Item<>(key, value, keyHash);
-        if (!keyEquals(hashArray[index], item)) {
+        if (hashArray[index] != null
+                && !keyEquals(hashArray[index], item)) {
             return false;
-        }
-        while (hashArray[index] != null) {
-            ++index;
-            index %= arraySize;
         }
         hashArray[index] = item;
         size++;
@@ -93,6 +87,10 @@ public class SimpleHashMap<K, V> implements Iterable<K> {
         size--;
         modCount++;
         return true;
+    }
+
+    public int getArraySize() {
+        return arraySize;
     }
 
     @Override
