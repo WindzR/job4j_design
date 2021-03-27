@@ -1,8 +1,6 @@
 package ru.job4j.collection.map;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 public class SimpleHashMap<K, V> implements Iterable<K> {
     private final static float LOAD_FACTOR = 0.5F;
@@ -95,11 +93,34 @@ public class SimpleHashMap<K, V> implements Iterable<K> {
 
     @Override
     public Iterator<K> iterator() {
-        return null;
-    }
+        Iterator<K> it = new Iterator<K>() {
+            private final int expectedModCount = modCount;
+            private int currentIndex = 0;
+            private int count = 0;
 
-    public static void main(String[] args) {
-        SimpleHashMap s = new SimpleHashMap<Integer, String>(58);
-        System.out.println(s.hash(s.arraySize));
+            @Override
+            public boolean hasNext() {
+                return count < size;
+            }
+
+            @Override
+            public K next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                for (int i = currentIndex; i < arraySize; i++) {
+                    if (hashArray[i] != null) {
+                        currentIndex = i;
+                        count++;
+                        break;
+                    }
+                }
+                return hashArray[currentIndex++].getKey();
+            }
+        };
+        return it;
     }
 }
