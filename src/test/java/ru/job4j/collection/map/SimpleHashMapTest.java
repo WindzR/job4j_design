@@ -41,6 +41,19 @@ public class SimpleHashMapTest {
         assertTrue(hashMap.insert(3, "Uliana"));
         assertTrue(hashMap.insert(4, "Ruslan"));
         assertThat(hashMap.get(1), is("Ivan"));
+        assertThat(hashMap.get(4), is("Ruslan"));
+        assertThat(hashMap.getArraySize(), is(16));
+    }
+
+    @Test
+    public void extendArrayStringSuccess() {
+        var hashMap = new SimpleHashMap<String, String>(4);
+        assertTrue(hashMap.insert("First", "Ivan"));
+        assertTrue(hashMap.insert("2", "Petr"));
+        assertTrue(hashMap.insert("3", "Uliana"));
+        assertTrue(hashMap.insert("Four", "Ruslan"));
+        assertThat(hashMap.get("First"), is("Ivan"));
+        assertThat(hashMap.get("Four"), is("Ruslan"));
         assertThat(hashMap.getArraySize(), is(16));
     }
 

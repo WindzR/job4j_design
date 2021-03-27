@@ -25,8 +25,18 @@ public class SimpleHashMap<K, V> implements Iterable<K> {
     }
 
     private void extendArray() {
-        arraySize = arraySize * 2;
-        hashArray = Arrays.copyOf(hashArray, arraySize);
+        Item<K, V>[] temp = hashArray;
+        Item<K, V> item = null;
+        hashArray = new Item[arraySize * 2];
+        arraySize *= 2;
+        size = 0;
+        modCount = 0;
+        for (int i = 0; i < temp.length; i++) {
+            if (temp[i] != null) {
+                item = temp[i];
+                this.insert(item.getKey(), item.getValue());
+            }
+        }
     }
 
     private boolean checkLoadFactor() {
@@ -87,6 +97,21 @@ public class SimpleHashMap<K, V> implements Iterable<K> {
         return true;
     }
 
+    /**
+     * Метод для проверки вставки элементов в хешмапу
+     */
+    private void display() {
+        SimpleHashMap<Integer, String> s = new SimpleHashMap<>();
+        for (int i = 0; i < s.arraySize; i++) {
+            if (hashArray[i] != null) {
+                System.out.println("Index -> " + i
+                        + " key -> " + hashArray[i].getKey()
+                        + " hash -> " + hashArray[i].keyHash()
+                        + " value -> " + hashArray[i].getValue());
+            }
+        }
+    }
+
     public int getArraySize() {
         return arraySize;
     }
@@ -123,4 +148,16 @@ public class SimpleHashMap<K, V> implements Iterable<K> {
         };
         return it;
     }
+
+    public static void main(String[] args) {
+        SimpleHashMap<String, String> s = new SimpleHashMap<>();
+        s.insert("1", "first");
+        s.insert("3", "second");
+        s.insert("fed", "third");
+        s.insert("6", "forth");
+        s.insert("7", "five");
+        s.display();
+    }
+
+
 }
