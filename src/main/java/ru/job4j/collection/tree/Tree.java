@@ -39,7 +39,6 @@ public class Tree<E> implements SimpleTree<E> {
             Node<E> el = data.poll();
             if (condition.test(el)) {
                 rsl = Optional.of(el);
-                break;
             }
             data.addAll(el.children);
         }
