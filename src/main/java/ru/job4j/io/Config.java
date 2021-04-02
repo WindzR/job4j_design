@@ -2,6 +2,7 @@ package ru.job4j.io;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,25 +16,38 @@ public class Config {
 
     public void load() {
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
-            values = read.lines()
-                    .filter(str -> !str.isEmpty() && !str.startsWith("#"))
-                    .collect(Collectors.toMap(key -> key.split("=")[0], value -> value.split("=")[1]));
-        } catch (Exception ex) {
+            for (String line = read.readLine(); line != null; line = read.readLine()) {
+                if (isPermissible(line)) {
+                    String[] temp = getArray(line);
+                    values.put(temp[0], temp[1]);
+                }
+            }
+//            values = read.lines()
+//                    .filter(str -> !str.isEmpty() && !str.startsWith("#"))
+//                    .collect(Collectors.toMap(key -> key.split("=")[0], value -> value.split("=")[1]));
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
+    private boolean isPermissible(String line) {
+        return !line.isEmpty() && !line.startsWith("#");
+    }
+
+    private String[] getArray(String line) {
+        String[] result = line.split("=");
+        if (result.length != 2 || result[0].isEmpty() || result[1].isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        return result;
+    }
+
     public String value(String key) {
-        if (values.isEmpty()) {
-            throw new UnsupportedOperationException("Don't impl this method yet!");
+        if (!values.containsKey(key)) {
+            System.out.println("Keys is not found!");
+            return "";
         }
-        String value = null;
-        for (Map.Entry<String, String> index : values.entrySet()) {
-            if (key.equals(index.getKey())) {
-                value = index.getValue();
-            }
-        }
-        return value;
+        return values.get(key);
     }
 
     @Override

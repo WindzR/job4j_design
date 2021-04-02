@@ -1,6 +1,9 @@
 package ru.job4j.io;
 
 import org.junit.Test;
+
+import java.util.NoSuchElementException;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -32,5 +35,12 @@ public class ConfigTest {
         assertThat(config.value("hibernate.connection.driver_class"), is("org.postgresql.Driver"));
         assertThat(config.value("hibernate.connection.username"), is("postgres"));
         assertThat(config.value("hibernate.connection.password"), is("password"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenIllegalArgumentException() {
+        String path = "./data/illigal_pair_identity.properties";
+        Config config = new Config(path);
+        config.load();
     }
 }
