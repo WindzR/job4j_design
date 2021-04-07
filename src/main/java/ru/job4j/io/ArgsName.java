@@ -12,9 +12,15 @@ public class ArgsName {
 
     private void parse(String[] args) {
         /* TODO parse args to values. */
-        String[] temp = new String[2];
+        if (args.length == 0) {
+            throw new IllegalArgumentException("Arguments is absent!");
+        }
+        String[] temp;
         for (int i = 0; i < args.length; i++) {
             temp = args[i].split("=");
+            if (temp.length != 2) {
+                throw new IllegalArgumentException("Incorrect input of arguments!");
+            }
             temp[0] = temp[0].substring(1);
             values.put(temp[0], temp[1]);
         }
