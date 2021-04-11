@@ -1,6 +1,8 @@
 package ru.job4j.io;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,15 +18,22 @@ public class ConsoleChat {
         this.botAnswers = botAnswers;
     }
 
+    /**
+     * Основной метод для общения с ботом через консоль.
+     * Записывает весь диалог пользователя и бота в файл из path.
+     */
+
     public void run() {
-        try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(path)))) {
+ //       try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(path)))) {
+        try (BufferedWriter out = new BufferedWriter(
+                new FileWriter(path, StandardCharsets.UTF_8, true))) {
             boolean isDialog = true;
             boolean botIsWorking = true;
             while (isDialog) {
                 Scanner sc = new Scanner(System.in);
                 System.out.print("Создатель: ");
                 String question = sc.nextLine();
-                out.println("Создатель: " + question);
+                out.write("Создатель: " + question + System.lineSeparator());
                 if (question.equals(OUT)) {
                     isDialog = false;
                     botIsWorking = false;
@@ -37,7 +46,7 @@ public class ConsoleChat {
                 }
                 if (botIsWorking) {
                     String answer = botAnswer();
-                    out.println("Бот : " + answer);
+                    out.write("Бот : " + answer + System.lineSeparator());
                 }
             }
         } catch (IOException ex) {
@@ -45,9 +54,15 @@ public class ConsoleChat {
         }
     }
 
+    /**
+     * Метод для выбора ответа бота.
+     * Читает файл с ответами и случайно выбирает строку для ответа.
+     * @return ответ вида String
+     */
+
     private String botAnswer() {
         String answer = " ";
-        try (BufferedReader in = new BufferedReader(new FileReader(botAnswers))) {
+        try (BufferedReader in = new BufferedReader(new FileReader(botAnswers, StandardCharsets.UTF_8))) {
             List<String> answerList = new ArrayList<>();
             answerList = in.lines().collect(Collectors.toList());
             Random random = new Random();
