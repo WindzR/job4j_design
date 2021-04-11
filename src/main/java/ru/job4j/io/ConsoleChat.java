@@ -1,7 +1,6 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +23,6 @@ public class ConsoleChat {
      */
 
     public void run() {
- //       try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(path)))) {
         try (BufferedWriter out = new BufferedWriter(
                 new FileWriter(path, StandardCharsets.UTF_8, true))) {
             boolean isDialog = true;
