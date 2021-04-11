@@ -19,15 +19,25 @@ public class ConsoleChat {
     public void run() {
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(path)))) {
             boolean isDialog = true;
+            boolean botIsWorking = true;
             while (isDialog) {
                 Scanner sc = new Scanner(System.in);
                 System.out.print("Создатель: ");
                 String question = sc.nextLine();
                 out.println("Создатель: " + question);
-                String answer = botAnswer();
-                out.println("Бот : " + answer);
                 if (question.equals(OUT)) {
                     isDialog = false;
+                    botIsWorking = false;
+                }
+                if (question.equals(STOP)) {
+                    botIsWorking = false;
+                }
+                if (question.equals(CONTINUE)) {
+                    botIsWorking = true;
+                }
+                if (botIsWorking) {
+                    String answer = botAnswer();
+                    out.println("Бот : " + answer);
                 }
             }
         } catch (IOException ex) {
