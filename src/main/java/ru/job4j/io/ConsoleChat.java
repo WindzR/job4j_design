@@ -24,14 +24,16 @@ public class ConsoleChat {
 
     public void run() {
         try (BufferedWriter out = new BufferedWriter(
-                new FileWriter(path, StandardCharsets.UTF_8, true))) {
+                new FileWriter(path, StandardCharsets.UTF_8, false))) {
             boolean isDialog = true;
             boolean botIsWorking = true;
+            List<String> logFile = new ArrayList<>();
+            List<String> answerList = botAnswer();
             while (isDialog) {
                 Scanner sc = new Scanner(System.in);
                 System.out.print("Создатель: ");
                 String question = sc.nextLine();
-                out.write("Создатель: " + question + System.lineSeparator());
+                logFile.add("Создатель: " + question);
                 if (question.equals(OUT)) {
                     isDialog = false;
                     botIsWorking = false;
@@ -43,9 +45,15 @@ public class ConsoleChat {
                     botIsWorking = true;
                 }
                 if (botIsWorking) {
-                    String answer = botAnswer();
-                    out.write("Бот : " + answer + System.lineSeparator());
+                    Random random = new Random();
+                    int choiceAnswer = random.nextInt(answerList.size() - 1);
+                    String answer = answerList.get(choiceAnswer);
+                    System.out.println("Бот : " + answer);
+                    logFile.add("Бот : " + answer);
                 }
+            }
+            for (String phrase : logFile) {
+                out.write(phrase + System.lineSeparator());
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -58,19 +66,14 @@ public class ConsoleChat {
      * @return ответ вида String
      */
 
-    private String botAnswer() {
-        String answer = " ";
+    private List<String> botAnswer() {
+        List<String> answerList = new ArrayList<>();
         try (BufferedReader in = new BufferedReader(new FileReader(botAnswers, StandardCharsets.UTF_8))) {
-            List<String> answerList = new ArrayList<>();
             answerList = in.lines().collect(Collectors.toList());
-            Random random = new Random();
-            int chooseAnswer = random.nextInt(answerList.size() - 1);
-            answer = answerList.get(chooseAnswer);
-            System.out.println("Бот : " + answer);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return answer;
+        return answerList;
     }
 
     public static void main(String[] args) {
