@@ -23,37 +23,37 @@ public class ConsoleChat {
      */
 
     public void run() {
+        boolean isDialog = true;
+        boolean botIsWorking = true;
+        List<String> logFile = new ArrayList<>();
+        List<String> answerList = botAnswer();
+        while (isDialog) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Создатель: ");
+            String question = sc.nextLine();
+            logFile.add("Создатель: " + question);
+            if (question.equals(OUT)) {
+                isDialog = false;
+                botIsWorking = false;
+            }
+            if (question.equals(STOP)) {
+                botIsWorking = false;
+            }
+            if (question.equals(CONTINUE)) {
+                botIsWorking = true;
+            }
+            if (botIsWorking) {
+                Random random = new Random();
+                int choiceAnswer = random.nextInt(answerList.size() - 1);
+                String answer = answerList.get(choiceAnswer);
+                System.out.println("Бот : " + answer);
+                logFile.add("Бот : " + answer);
+            }
+        }
         try (BufferedWriter out = new BufferedWriter(
                 new FileWriter(path, StandardCharsets.UTF_8, false))) {
-            boolean isDialog = true;
-            boolean botIsWorking = true;
-            List<String> logFile = new ArrayList<>();
-            List<String> answerList = botAnswer();
-            while (isDialog) {
-                Scanner sc = new Scanner(System.in);
-                System.out.print("Создатель: ");
-                String question = sc.nextLine();
-                logFile.add("Создатель: " + question);
-                if (question.equals(OUT)) {
-                    isDialog = false;
-                    botIsWorking = false;
-                }
-                if (question.equals(STOP)) {
-                    botIsWorking = false;
-                }
-                if (question.equals(CONTINUE)) {
-                    botIsWorking = true;
-                }
-                if (botIsWorking) {
-                    Random random = new Random();
-                    int choiceAnswer = random.nextInt(answerList.size() - 1);
-                    String answer = answerList.get(choiceAnswer);
-                    System.out.println("Бот : " + answer);
-                    logFile.add("Бот : " + answer);
-                }
-            }
             for (String phrase : logFile) {
-                out.write(phrase + System.lineSeparator());
+                out.write(phrase + "\r\n");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
