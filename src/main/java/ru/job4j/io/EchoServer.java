@@ -3,7 +3,6 @@ package ru.job4j.io;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class EchoServer {
     public static void main(String[] args) throws IOException {
@@ -13,9 +12,9 @@ public class EchoServer {
                 try (OutputStream out = socket.getOutputStream();
                      BufferedReader in = new BufferedReader(
                              new InputStreamReader(socket.getInputStream()))) {
-                    String str;
+                    String str = in.readLine();
                     String message = " ";
-                    while (!(str = in.readLine()).isEmpty()) {
+                    while (!(in.readLine()).isEmpty()) {
                         System.out.println(str);
                         if (str.contains("?msg=Exit")) {
                             message = "Server is closed!";
