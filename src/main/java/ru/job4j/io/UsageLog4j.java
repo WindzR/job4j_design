@@ -7,10 +7,17 @@ public class UsageLog4j {
     private static final Logger LOG = LoggerFactory.getLogger(UsageLog4j.class.getName());
 
     public static void main(String[] args) {
-        LOG.trace("trace message");
-        LOG.debug("debug message");
-        LOG.info("info message");
-        LOG.warn("warn message");
-        LOG.error("error message");
+        boolean turnOn = true;
+        String model = "X-52";
+        int yearOfrelease = 2009;
+        float capacity = 0.75f;
+        double sizeOfMemory = 784.5;
+        byte registr = 64;
+        short supply = 1024;
+        long quantity = 100500;
+        LOG.debug(
+                "Model info turnOn : {}, model : {}, yearOfrelease : {}, capacity : {}, sizeOfMemory : {}, registr : {}, supply : {}, quantity : {}",
+                 turnOn, model, yearOfrelease, capacity, sizeOfMemory, registr, supply, quantity);
+
     }
 }
