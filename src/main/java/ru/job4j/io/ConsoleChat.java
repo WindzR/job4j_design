@@ -53,7 +53,8 @@ public class ConsoleChat {
         try (BufferedWriter out = new BufferedWriter(
                 new FileWriter(path, StandardCharsets.UTF_8, false))) {
             for (String phrase : logFile) {
-                out.write(phrase + "\r\n");
+                out.write(phrase);
+                out.newLine();
             }
         } catch (IOException ex) {
             ex.printStackTrace();
