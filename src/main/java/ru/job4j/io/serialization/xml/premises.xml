@@ -1,0 +1,13 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<premises living = "true" area = "40" model = "DTF-14">
+    <addresses>
+        <street>Lenina</street>
+        <house>13</house>
+        <flat>42</flat>
+    </addresses>
+    <rooms>
+        <room>kitchen</room>
+        <room>hallway</room>
+        <room>hall</room>
+    </rooms>
+</premises>
