@@ -1,9 +1,9 @@
-insert into users (name) values ('Admin');
-insert into users (name) values ('User1');
-insert into users (name) values ('User2');
-insert into roles (role, user_id) values ('administrator', 1);
-insert into roles (role, user_id) values ('user', 2);
-insert into roles (role, user_id) values ('user', 3);
+insert into users (name, role_id) values ('Admin', 1);
+insert into users (name, role_id) values ('User1', 2);
+insert into users (name, role_id) values ('User2', 2);
+insert into roles (role) values ('administrator');
+insert into roles (role) values ('user');
+insert into roles (role) values ('user');
 insert into rules (rule) values ('read');
 insert into rules (rule) values ('write');
 insert into rule_of_roles (role_id, rule_id) values (1, 2);
