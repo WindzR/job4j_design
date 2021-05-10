@@ -36,7 +36,9 @@ insert into product (name, type_id, expired_date, price) values ('Ред бул�
 insert into product (name, type_id, expired_date, price) values ('Дюшес', 4, '08-03-22', 45);
 
 /* Запрос на получение всех продуктов с типом "СЫР"*/
-select * from product where type_id = 1;
+select * from product as p
+inner join type as t on p.type_id = t.id
+where t.name = 'Сыр';
 
 /* Запрос на получения всех продуктов, у кого в имени есть слово "мороженное"*/
 select * from product where name like '%мороженное%';
@@ -54,7 +56,9 @@ inner join product as p on p.type_id = t.id
 group by t.name;
 
 /* Запрос получение всех продуктов с типом "СЫР" и "МОЛОКО"*/
-select * from product where type_id = 1 or type_id = 2;
+select * from product as p
+inner join type as t on p.type_id = t.id
+where t.name = 'Сыр' or t.name = 'Молоко';
 
 /* Запрос, который выводит тип продуктов, которых осталось меньше 10 штук.*/
 select t.name, count(p.type_id) from type as t
