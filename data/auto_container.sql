@@ -61,15 +61,15 @@ FROM auto a
 
 /* Вывод отдельно кузова, которые не используются в машине */
 SELECT b.model AS body, b.manufacturer, a.model AS car FROM body b
-	FULL JOIN auto a ON a.body_id = b.id
+	LEFT JOIN auto a ON a.body_id = b.id
 	WHERE a.body_id IS NULL;
 
 /* Вывод отдельно двигателей, которые не используются в машине */
 SELECT e.model AS engine, e.manufacturer, a.model AS car FROM engine e
-	FULL JOIN auto a ON a.engine_id = e.id
+	LEFT JOIN auto a ON a.engine_id = e.id
 	WHERE a.engine_id IS NULL;
 
 /* Вывод отдельно коробок передач, которые не используются в машине */
 SELECT g.model AS gearbox, g.manufacturer, a.model AS car FROM gearbox g
-	FULL JOIN auto a ON a.gearbox_id = g.id
+	LEFT JOIN auto a ON a.gearbox_id = g.id
 	WHERE a.gearbox_id IS NULL;
