@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Config {
     private final String path;
@@ -22,9 +21,6 @@ public class Config {
                     values.put(temp[0], temp[1]);
                 }
             }
-//            values = read.lines()
-//                    .filter(str -> !str.isEmpty() && !str.startsWith("#"))
-//                    .collect(Collectors.toMap(key -> key.split("=")[0], value -> value.split("=")[1]));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
