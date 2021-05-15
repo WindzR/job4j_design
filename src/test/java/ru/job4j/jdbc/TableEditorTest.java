@@ -28,6 +28,8 @@ public class TableEditorTest {
             assertThat(tableEditor.getScheme("main"), is(expected.toString()));
             tableEditor.dropTable("main");
             assertThat(tableEditor.getScheme("main"), is(String.format("%-15s %-15s%n", "column", "type")));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }
