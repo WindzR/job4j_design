@@ -1,8 +1,10 @@
 package ru.job4j.jdbc;
 
+import org.junit.After;
 import org.junit.Test;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Properties;
 
 import static org.hamcrest.Matchers.is;
@@ -11,9 +13,13 @@ import static org.junit.Assert.*;
 public class TableEditorTest {
 
     @Test
-    public void whenCreateTable() throws Exception {
+    public void whenCreateTable() {
         Properties properties = new Properties();
-        properties.load(new FileReader("data/app.properties"));
+        try {
+            properties.load(new FileReader("data/app.properties"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         try (TableEditor tableEditor = new TableEditor(properties)) {
             tableEditor.createTable("main");
             tableEditor.addColumn("main", "column1", "text");
@@ -28,8 +34,6 @@ public class TableEditorTest {
             assertThat(tableEditor.getScheme("main"), is(expected.toString()));
             tableEditor.dropTable("main");
             assertThat(tableEditor.getScheme("main"), is(String.format("%-15s %-15s%n", "column", "type")));
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 }
