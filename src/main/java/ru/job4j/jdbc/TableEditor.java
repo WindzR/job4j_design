@@ -8,68 +8,84 @@ public class TableEditor implements AutoCloseable {
     private Connection connection;
     private Properties properties;
 
-    public TableEditor(Properties properties) throws ClassNotFoundException, SQLException {
+    public TableEditor(Properties properties) {
         this.properties = properties;
         initConnection();
     }
 
-    private void initConnection() throws SQLException, ClassNotFoundException {
-        Class.forName("org.postgresql.Driver");
-        connection = DriverManager.getConnection(
-                properties.getProperty("connection.url"),
-                properties.getProperty("connection.username"),
-                properties.getProperty("connection.password")
-        );
+    private void initConnection() {
+        try {
+            Class.forName("org.postgresql.Driver");
+            connection = DriverManager.getConnection(
+                    properties.getProperty("connection.url"),
+                    properties.getProperty("connection.username"),
+                    properties.getProperty("connection.password")
+            );
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public void createTable(String tableName) throws SQLException {
+    public void createTable(String tableName) {
         String sql = "create table if not exists " + tableName + "()";
         execute(sql);
     }
 
-    public void dropTable(String tableName) throws SQLException {
+    public void dropTable(String tableName) {
         String sql = "drop table if exists " + tableName;
         execute(sql);
     }
 
-    public void addColumn(String tableName, String columnName, String type) throws SQLException {
+    public void addColumn(String tableName, String columnName, String type) {
         String sql = "alter table " + tableName + " add " + columnName + " " + type;
         execute(sql);
     }
 
-    public void dropColumn(String tableName, String columnName) throws SQLException {
+    public void dropColumn(String tableName, String columnName) {
         String sql = "alter table " + tableName + " drop " + columnName;
         execute(sql);
     }
 
-    public void renameColumn(String tableName, String columnName, String newColumnName) throws SQLException {
+    public void renameColumn(String tableName, String columnName, String newColumnName) {
         String sql = "alter table " + tableName + " rename column " + columnName + " to " + newColumnName;
         execute(sql);
     }
 
-    public String getScheme(String tableName) throws SQLException {
+    public String getScheme(String tableName) {
         StringBuilder scheme = new StringBuilder();
-        DatabaseMetaData metaData = connection.getMetaData();
-        try (ResultSet columns = metaData.getColumns(null, null, tableName, null)) {
-            scheme.append(String.format("%-15s %-15s%n", "column", "type"));
-            while (columns.next()) {
-                scheme.append(String.format("%-15s %-15s%n",
-                        columns.getString("COLUMN_NAME"),
-                        columns.getString("TYPE_NAME")));
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            try (ResultSet columns = metaData.getColumns(null, null, tableName, null)) {
+                scheme.append(String.format("%-15s %-15s%n", "column", "type"));
+                while (columns.next()) {
+                    scheme.append(String.format("%-15s %-15s%n",
+                            columns.getString("COLUMN_NAME"),
+                            columns.getString("TYPE_NAME")));
+                }
             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return scheme.toString();
     }
 
-    private void execute (String sql) throws SQLException {
-        Statement statement = connection.createStatement();
-        statement.execute(sql);
+    private void execute(String sql) {
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (SQLException sqlEx) {
+            sqlEx.printStackTrace();
+        }
     }
 
     @Override
-    public void close() throws Exception {
-        if (connection != null) {
-            connection.close();
+    public void close() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException sqlEx) {
+            sqlEx.printStackTrace();
         }
     }
 }
