@@ -5,7 +5,8 @@ public class Address {
     private int house;
     private int flat;
 
-    public Address() {}
+    public Address() {
+    }
 
     public Address(String street, int house, int flat) {
         this.street = street;

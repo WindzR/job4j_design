@@ -25,7 +25,8 @@ public class PremisesForJAXB {
     @XmlElement(name = "room")
     private String[] rooms;
 
-    public PremisesForJAXB() {}
+    public PremisesForJAXB() {
+    }
 
     public PremisesForJAXB(boolean living, int area, String model, Address address, String[] rooms) {
         this.living = living;
@@ -47,7 +48,7 @@ public class PremisesForJAXB {
     }
 
     public static void main(String[] args) throws JAXBException {
-        final PremisesForJAXB premise = new PremisesForJAXB(true, 40, "DTF-14", new Address("Lenina", 13, 42), new String[]{"kitchen", "hallway","hall"});
+        final PremisesForJAXB premise = new PremisesForJAXB(true, 40, "DTF-14", new Address("Lenina", 13, 42), new String[]{"kitchen", "hallway", "hall"});
         JAXBContext context = JAXBContext.newInstance(PremisesForJAXB.class);
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
