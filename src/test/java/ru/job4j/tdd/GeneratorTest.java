@@ -38,7 +38,7 @@ public class GeneratorTest {
      * карта содержит лишние ключи, выкидывается исключение
      */
     @Test(expected = IllegalArgumentException.class)
-    public void whenIncorrectKeys() {
+    public void whenExcessKeys() {
         Generator generator = new Question();
         String template = "I am a ${name}, Who are ${subject}?";
         Map<String, String> arguments = Map.of("name", "Petr Arsentev", "subject", "you", "key3", "value3");
@@ -71,7 +71,7 @@ public class GeneratorTest {
      * когда шаблон не содержит ключей, метод возвращает сам шаблон
      */
     @Test
-    public void whenIncorrectKeys() {
+    public void whenNotExistKeys() {
         Generator generator = new Question();
         String template = "I am a Ivan, Who are you?";
         Map<String, String> arguments = Map.of("name", "Petr Arsentev", "subject", "you");
