@@ -110,9 +110,9 @@ public class Emails {
         User user5 = emails.generateUser("4mo", 2);
         emails.addUsers(user1);
         emails.addUsers(user2);
-//        emails.addUsers(user3);
-//        emails.addUsers(user4);
-//        emails.addUsers(user5);
+        emails.addUsers(user3);
+        emails.addUsers(user4);
+        emails.addUsers(user5);
         emails.display(emails.getMapEmails());
         HashMap<String, HashSet<String>> result = emails.mergeEmails();
         System.out.println("<--------------------MERGING LIST------------------->");
