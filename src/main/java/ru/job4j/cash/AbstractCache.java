@@ -14,6 +14,9 @@ public abstract class AbstractCache<K, V> {
     }
 
     public V get(K key) {
+        if (cache.get(key) == null || !cache.containsKey(key)) {
+            load(key);
+        }
         SoftReference<V> value = cache.get(key);
         return value.get();
     }
