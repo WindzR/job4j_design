@@ -3,12 +3,13 @@ package ru.job4j.gc.ref;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class SoftDemo {
 
     public static void main(String[] args) {
         example1();
-        //example2();
+       // example2();
     }
 
     private static void example1() {
