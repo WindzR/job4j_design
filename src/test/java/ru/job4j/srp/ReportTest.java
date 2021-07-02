@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ReportTest {
@@ -84,5 +86,51 @@ public class ReportTest {
                 .append("<th>").append(worker.getSalary()).append("</th>").append("</tr>");
         String expect = expectString.toString();
         assertTrue(engine.generate(em -> true).contains(expect));
+    }
+
+    @Test
+    public void whenXMLGenerated() {
+        MemStore store = new MemStore();
+        Calendar now = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        Employee worker = new Employee("Ivan", now, now, 100);
+        store.add(worker);
+        ReportForm report = new XmlReport();
+        ReportEngine engine = new ReportEngine(store, report);
+        StringBuilder expectString = new StringBuilder()
+                .append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>").append("\n")
+                .append("<employee name=").append("\"").append(worker.getName()).append("\"")
+                .append(" salary=").append("\"").append(worker.getSalary()).append("\"").append(">").append("\n")
+                .append("    ")
+                .append("<hired>").append(dateFormat.format(worker.getHired().getTime())).append("</hired>").append("\n")
+                .append("    ")
+                .append("<fired>").append(dateFormat.format(worker.getFired().getTime())).append("</fired>").append("\n")
+                .append("</employee>").append("\n");
+        String expect = expectString.toString();
+        assertThat(engine.generate(em -> true), is(expect));
+    }
+
+    @Test
+    public void whenJSONGenerated() {
+        MemStore store = new MemStore();
+        Calendar now = Calendar.getInstance();
+        now.set(2021, Calendar.JULY, 3, 1, 9, 55);
+        Employee worker = new Employee("Ivan", now, now, 100);
+        store.add(worker);
+        ReportForm report = new JsonReport();
+        ReportEngine engine = new ReportEngine(store, report);
+        StringBuilder expectString = new StringBuilder()
+                .append("{")
+                .append("\"name\":\"").append(worker.getName()).append("\",")
+                .append("\"hired\":{")
+                .append("\"year\":2021,\"month\":6,\"dayOfMonth\":3,")
+                .append("\"hourOfDay\":1,\"minute\":9,\"second\":55},")
+                .append("\"fired\":{")
+                .append("\"year\":2021,\"month\":6,\"dayOfMonth\":3,")
+                .append("\"hourOfDay\":1,\"minute\":9,\"second\":55},")
+                .append("\"salary\":").append(worker.getSalary()).append("}")
+                .append(System.lineSeparator());
+        String expect = expectString.toString();
+        assertThat(engine.generate(em -> true), is(expect));
     }
 }
