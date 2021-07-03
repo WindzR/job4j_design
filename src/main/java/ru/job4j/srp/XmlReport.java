@@ -1,5 +1,6 @@
 package ru.job4j.srp;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -13,14 +14,14 @@ public class XmlReport implements ReportForm {
     @Override
     public String generate(List<Employee> employees) {
         String xml = "";
+        Employees generalObject = new Employees();
+        generalObject.setEmployeeList(employees);
         try {
-            JAXBContext context = JAXBContext.newInstance(Employee.class);
+            JAXBContext context = JAXBContext.newInstance(Employees.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             try (StringWriter writer = new StringWriter()) {
-                for (Employee employee : employees) {
-                    marshaller.marshal(employee, writer);
-                }
+                marshaller.marshal(generalObject, writer);
                 xml = writer.getBuffer().toString();
             }
         } catch (IOException | JAXBException ex) {

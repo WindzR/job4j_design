@@ -99,13 +99,17 @@ public class ReportTest {
         ReportEngine engine = new ReportEngine(store, report);
         StringBuilder expectString = new StringBuilder()
                 .append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>").append("\n")
+                .append("<employees>").append("\n")
+                .append("    ")
                 .append("<employee name=").append("\"").append(worker.getName()).append("\"")
                 .append(" salary=").append("\"").append(worker.getSalary()).append("\"").append(">").append("\n")
-                .append("    ")
+                .append("        ")
                 .append("<hired>").append(dateFormat.format(worker.getHired().getTime())).append("</hired>").append("\n")
-                .append("    ")
+                .append("        ")
                 .append("<fired>").append(dateFormat.format(worker.getFired().getTime())).append("</fired>").append("\n")
-                .append("</employee>").append("\n");
+                .append("    ")
+                .append("</employee>").append("\n")
+                .append("</employees>").append("\n");
         String expect = expectString.toString();
         assertThat(engine.generate(em -> true), is(expect));
     }
@@ -120,7 +124,7 @@ public class ReportTest {
         ReportForm report = new JsonReport();
         ReportEngine engine = new ReportEngine(store, report);
         StringBuilder expectString = new StringBuilder()
-                .append("{")
+                .append("{\"employeeList\":[{")
                 .append("\"name\":\"").append(worker.getName()).append("\",")
                 .append("\"hired\":{")
                 .append("\"year\":2021,\"month\":6,\"dayOfMonth\":3,")
@@ -128,7 +132,7 @@ public class ReportTest {
                 .append("\"fired\":{")
                 .append("\"year\":2021,\"month\":6,\"dayOfMonth\":3,")
                 .append("\"hourOfDay\":1,\"minute\":9,\"second\":55},")
-                .append("\"salary\":").append(worker.getSalary()).append("}")
+                .append("\"salary\":").append(worker.getSalary()).append("}]}")
                 .append(System.lineSeparator());
         String expect = expectString.toString();
         assertThat(engine.generate(em -> true), is(expect));
