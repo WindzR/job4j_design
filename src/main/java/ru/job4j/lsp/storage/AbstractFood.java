@@ -6,6 +6,27 @@ abstract public class AbstractFood {
      private String name;
      private LocalDateTime expireDate;
      private LocalDateTime createDate;
-     private int price;
-     private boolean discount;
+     private float price;
+     private float discount;
+     private boolean isDiscount = false;
+
+     abstract String getName();
+
+     abstract LocalDateTime getExpireDate();
+
+     abstract LocalDateTime getCreateDate();
+
+     abstract float getPrice();
+
+     abstract void setPrice(float price);
+
+     abstract float getDiscount();
+
+     public void setUpDiscount(boolean accept) {
+          isDiscount = accept;
+     }
+
+     public boolean isDiscount() {
+          return isDiscount;
+     }
 }
