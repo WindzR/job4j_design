@@ -1,6 +1,5 @@
 package ru.job4j.lsp.storage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,10 +9,7 @@ public interface Depository {
 
     void storage(AbstractFood food);
 
-    /**
-     * введен для проверки работы тестами
-     * @param name имя продукта
-     * @return проверяемый продукт
-     */
-    AbstractFood getFood(String name);
+    List<AbstractFood> getAll();
+
+    boolean accept(double shelfLife);
 }

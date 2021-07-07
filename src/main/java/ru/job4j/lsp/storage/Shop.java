@@ -1,6 +1,8 @@
 package ru.job4j.lsp.storage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Shop implements Depository {
@@ -25,10 +27,15 @@ public class Shop implements Depository {
         discount.put(food.getName(), food);
     }
 
-    public AbstractFood getFood(String name) {
-        if (shop.containsKey(name)) {
-            return shop.get(name);
-        }
-        return discount.get(name);
+    public List<AbstractFood> getAll() {
+        List<AbstractFood> list = new ArrayList<>(shop.values());
+        List<AbstractFood> discountList = new ArrayList<>(discount.values());
+        list.addAll(discountList);
+        return list;
+    }
+
+    @Override
+    public boolean accept(double shelfLife) {
+        return shelfLife >= 25 && shelfLife < 100;
     }
 }

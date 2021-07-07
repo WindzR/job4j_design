@@ -69,8 +69,8 @@ public class Cheese extends AbstractFood {
             return false;
         }
         Cheese cheese = (Cheese) o;
-        return price == cheese.price &&
-                name.equals(cheese.name);
+        return price == cheese.price
+                && name.equals(cheese.name);
     }
 
     @Override

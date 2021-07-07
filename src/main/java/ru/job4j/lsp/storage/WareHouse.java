@@ -1,6 +1,8 @@
 package ru.job4j.lsp.storage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WareHouse implements Depository {
@@ -12,7 +14,12 @@ public class WareHouse implements Depository {
         System.out.println("Продукт <" + food.getName() + "> отправлен на хранение на склад.");
     }
 
-    public AbstractFood getFood(String name) {
-        return wareHouse.get(name);
+    public List<AbstractFood> getAll() {
+        return new ArrayList<>(wareHouse.values());
+    }
+
+    @Override
+    public boolean accept(double shelfLife) {
+        return shelfLife >= 0 && shelfLife < 25;
     }
 }

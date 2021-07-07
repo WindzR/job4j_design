@@ -1,6 +1,8 @@
 package ru.job4j.lsp.storage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Trash implements Depository {
@@ -16,7 +18,12 @@ public class Trash implements Depository {
         System.out.println("Срок годности <" + food.getName() + "> истек и он подлежит утилизации!");
     }
 
-    public AbstractFood getFood(String name) {
-        return trash.get(name);
+    public List<AbstractFood> getAll() {
+        return new ArrayList<>(trash.values());
+    }
+
+    @Override
+    public boolean accept(double shelfLife) {
+        return shelfLife == 100;
     }
 }

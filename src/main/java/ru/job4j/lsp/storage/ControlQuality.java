@@ -2,20 +2,34 @@ package ru.job4j.lsp.storage;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * класс принимает наследников AbstractFood и выбирает куда направить продукт, в зависимости от условий
  */
 public class ControlQuality {
+
     private Depository depository;
-    private LocalDateTime now = LocalDateTime.now();
+    private List<Depository> depositories = new ArrayList<>();
+    private LocalDateTime currentDate;
     private ZoneOffset zone = ZoneOffset.UTC;
     private AbstractFood food;
 
     public ControlQuality() {
+        depositories = List.of(new WareHouse(), new Shop(), new Trash());
+        currentDate = LocalDateTime.now();
     }
 
     public ControlQuality(AbstractFood food) {
+        depositories = List.of(new WareHouse(), new Shop(), new Trash());
+        currentDate = LocalDateTime.now();
+        this.food = food;
+    }
+
+    public ControlQuality(LocalDateTime date, AbstractFood food) {
+        depositories = List.of(new WareHouse(), new Shop(), new Trash());
+        currentDate = date;
         this.food = food;
     }
 
@@ -36,16 +50,16 @@ public class ControlQuality {
         double result = -1;
         LocalDateTime create = food.getCreateDate();
         LocalDateTime expire = food.getExpireDate();
-        if (create.isAfter(now)) {
+        if (create.isAfter(currentDate)) {
             throw new IllegalArgumentException("Продукта еще не существует!");
         }
-        if (expire.isBefore(now)) {
+        if (expire.isBefore(currentDate)) {
             System.out.println("Срок годности истек! Пора выбрасывать!");
             result = 100;
         }
-        if (create.isBefore(now) && expire.isAfter(now)) {
+        if (create.isBefore(currentDate) && expire.isAfter(currentDate)) {
             long foodLife = expire.toEpochSecond(zone) - create.toEpochSecond(zone);
-            long timePassed = now.toEpochSecond(zone) - create.toEpochSecond(zone);
+            long timePassed = currentDate.toEpochSecond(zone) - create.toEpochSecond(zone);
             result = (double) timePassed * 100 / foodLife;
         }
         return result;
@@ -57,20 +71,14 @@ public class ControlQuality {
      */
     public void getStorage(AbstractFood food) {
         double shelfLife = checkShelfLife(food);
-        if (shelfLife >= 0 && shelfLife < 25) {
-            depository = new WareHouse();
-        }
-        if (shelfLife >= 25 && shelfLife < 100) {
-            depository = new Shop();
-            if (shelfLife >= 75) {
-                food.setUpDiscount(true);
+        for (Depository depository : depositories) {
+            if (depository.accept(shelfLife)) {
+                this.depository = depository;
             }
         }
-        if (shelfLife == 100) {
-            depository = new Trash();
+        if (shelfLife >= 75 && shelfLife < 100) {
+            food.setUpDiscount(true);
         }
         depository.storage(food);
     }
-
-
 }

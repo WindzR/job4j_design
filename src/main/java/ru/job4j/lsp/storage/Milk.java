@@ -69,8 +69,8 @@ public class Milk extends AbstractFood {
             return false;
         }
         Milk milk = (Milk) o;
-        return price == milk.price &&
-                name.equals(milk.name);
+        return price == milk.price
+                && name.equals(milk.name);
     }
 
     @Override
