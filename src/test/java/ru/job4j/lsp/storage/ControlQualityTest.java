@@ -63,6 +63,20 @@ public class ControlQualityTest {
     }
 
     @Test
+    public void whenCheckDiscount() {
+        LocalDateTime testDate = LocalDateTime.of(2021, 7, 9, 4, 0);
+        AbstractFood cheese = new Cheese("Gauda",
+                LocalDateTime.of(2021, 7, 10, 4, 0),
+                LocalDateTime.of(2021, 7, 1, 4, 0),
+                100);
+        ControlQuality quality = new ControlQuality(testDate, cheese);
+        quality.getStorage(cheese);
+        float expected = 75f;
+        assertThat(cheese.getPrice(), is(expected));
+        assertTrue(cheese.isDiscount());
+    }
+
+    @Test
     public void whenGoToTrash() {
         LocalDateTime testDate = LocalDateTime.of(2021, 7, 10, 5, 0);
         AbstractFood cheese = new Cheese("Gauda",

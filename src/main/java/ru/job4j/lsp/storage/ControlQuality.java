@@ -74,10 +74,8 @@ public class ControlQuality {
         for (Depository depository : depositories) {
             if (depository.accept(shelfLife)) {
                 this.depository = depository;
+                break;
             }
-        }
-        if (shelfLife >= 75 && shelfLife < 100) {
-            food.setUpDiscount(true);
         }
         depository.storage(food);
     }

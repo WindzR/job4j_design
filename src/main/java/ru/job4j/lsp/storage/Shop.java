@@ -8,9 +8,13 @@ import java.util.Map;
 public class Shop implements Depository {
     private Map<String, AbstractFood> shop = new HashMap<>();
     private Map<String, AbstractFood> discount = new HashMap<>();
+    private double shelfLife;
 
     @Override
     public void storage(AbstractFood food) {
+        if (shelfLife >= 75 && shelfLife < 100) {
+            food.setUpDiscount(true);
+        }
         if (!food.isDiscount()) {
             shop.put(food.getName(), food);
             System.out.println("Продукт <" + food.getName() + "> отправлен на продажу в магазин.");
@@ -36,6 +40,7 @@ public class Shop implements Depository {
 
     @Override
     public boolean accept(double shelfLife) {
+        this.shelfLife = shelfLife;
         return shelfLife >= 25 && shelfLife < 100;
     }
 }
