@@ -43,20 +43,15 @@ public class ParkingA implements Parking {
         return truckPlaces;
     }
 
-    public int getCarEmptyPlaces() {
+    /**
+     * метод, определяющий количество свободных мест на парковке
+     * @param machineParking проверяемая стоянка
+     * @return количество свободных мест
+     */
+    public int getEmptyPlaces(byte[] machineParking) {
         int count = 0;
-        for (int i = 0; i < carParking.length; i++) {
-            if (carParking[i] == 0) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int getTruckEmptyPlaces() {
-        int count = 0;
-        for (int i = 0; i < truckParking.length; i++) {
-            if (truckParking[i] == 0) {
+        for (int i = 0; i < machineParking.length; i++) {
+            if (machineParking[i] == 0) {
                 count++;
             }
         }
@@ -73,16 +68,6 @@ public class ParkingA implements Parking {
     }
 
     private void fillCarParking(int size) {
-//        int count = 0;
-//        for (int i = 0; i < test.length; i++) {
-//            if (test[i] == 0) {
-//                test[i] = 1;
-//                count++;
-//                if (count == 5) {
-//                    break;
-//                }
-//            }
-//        }
         int count = 0;
         for (int i = 0; i < carParking.length; i++) {
             if (carParking[i] == 0) {
@@ -95,35 +80,47 @@ public class ParkingA implements Parking {
         }
     }
 
+    /**
+     * метод, проверяющий можно ли запарковать на эту стоянку машину/грузовик
+     * @param car проверяемый транспорт
+     * @return результат true/false
+     */
     @Override
     public boolean accept(AbstractCar car) {
-        boolean isTruck = car.getClass().getCanonicalName().equals("Truck");
+        boolean isTruck = car.getClass().getCanonicalName().contains("Truck");
         if (isTruck) {
-            if (getTruckEmptyPlaces() > 0) {
+            if (getEmptyPlaces(truckParking) > 0) {
                 return true;
             }
-            if (getCarEmptyPlaces() >= car.getSize()) {
-                return true;
-            }
+            return getEmptyPlaces(carParking) >= car.getSize();
         }
-        return getCarEmptyPlaces() > 0;
+        return getEmptyPlaces(carParking) > 0;
     }
 
+    /**
+     * метод, определяющий место на стоянке куда будет запаркована машина/грузовик
+     * @param car паркуемая машина
+     */
     @Override
     public void parking(AbstractCar car) {
-        boolean isTruck = car.getClass().getCanonicalName().equals("Truck");
+        boolean isTruck = car.getClass().getCanonicalName().contains("Truck");
         if (isTruck) {
-            if (getTruckEmptyPlaces() > 0) {
+            if (getEmptyPlaces(truckParking) > 0) {
                 fillTruckParking();
             } else {
                 fillCarParking(car.getSize());
             }
             trucks.add(car);
+            return;
         }
         fillCarParking(1);
         cars.add(car);
     }
 
+    /**
+     * метод возвращает список запаркованного транспорта на этой стоянке
+     * @return список транспорта
+     */
     public List<AbstractCar> getAll() {
         List<AbstractCar> result = new ArrayList<>(cars);
         result.addAll(trucks);

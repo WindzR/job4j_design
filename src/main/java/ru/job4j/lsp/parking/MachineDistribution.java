@@ -4,7 +4,6 @@ import java.util.List;
 
 public class MachineDistribution {
     private List<Parking> parkings;
-    private Parking parking;
 
     public MachineDistribution() {
         this.parkings = List.of(new ParkingA());
@@ -17,7 +16,6 @@ public class MachineDistribution {
     public boolean carParking(AbstractCar car) {
         for (Parking parking : parkings) {
             if (parking.accept(car)) {
-                this.parking = parking;
                 parking.parking(car);
                 return true;
             }

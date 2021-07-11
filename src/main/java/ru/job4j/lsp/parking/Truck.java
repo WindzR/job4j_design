@@ -39,8 +39,8 @@ public class Truck extends AbstractCar {
             return false;
         }
         Truck truck = (Truck) o;
-        return size == truck.size &&
-                name.equals(truck.name);
+        return size == truck.size
+                && name.equals(truck.name);
     }
 
     @Override
