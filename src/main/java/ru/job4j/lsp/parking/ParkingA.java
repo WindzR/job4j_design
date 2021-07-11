@@ -87,7 +87,7 @@ public class ParkingA implements Parking {
      */
     @Override
     public boolean accept(AbstractCar car) {
-        boolean isTruck = car.getClass().getCanonicalName().contains("Truck");
+        boolean isTruck = car.getSize() > 1;
         if (isTruck) {
             if (getEmptyPlaces(truckParking) > 0) {
                 return true;
@@ -103,7 +103,7 @@ public class ParkingA implements Parking {
      */
     @Override
     public void parking(AbstractCar car) {
-        boolean isTruck = car.getClass().getCanonicalName().contains("Truck");
+        boolean isTruck = car.getSize() > 1;
         if (isTruck) {
             if (getEmptyPlaces(truckParking) > 0) {
                 fillTruckParking();
