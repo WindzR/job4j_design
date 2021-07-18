@@ -18,7 +18,7 @@ public class ControlQualityTest {
                 LocalDateTime.of(2021, 9, 1, 4, 0),
                 100);
         ControlQuality quality = new ControlQuality(testDate, cheese);
-        quality.getStorage(cheese);
+        quality.getStorage(testDate, cheese);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class ControlQualityTest {
                 LocalDateTime.of(2021, 7, 1, 4, 0),
                 100);
         ControlQuality quality = new ControlQuality(testDate, cheese);
-        quality.getStorage(cheese);
+        quality.getStorage(testDate, cheese);
         List<AbstractFood> expected = quality.getStrategy().getAll();
         assertThat(expected, is(List.of(cheese)));
     }
@@ -42,7 +42,7 @@ public class ControlQualityTest {
                 LocalDateTime.of(2021, 7, 1, 4, 0),
                 100);
         ControlQuality quality = new ControlQuality(testDate, cheese);
-        quality.getStorage(cheese);
+        quality.getStorage(testDate, cheese);
         List<AbstractFood> expected = quality.getStrategy().getAll();
         assertThat(expected, is(List.of(cheese)));
         assertFalse(cheese.isDiscount());
@@ -56,7 +56,7 @@ public class ControlQualityTest {
                 LocalDateTime.of(2021, 7, 1, 4, 0),
                 100);
         ControlQuality quality = new ControlQuality(testDate, cheese);
-        quality.getStorage(cheese);
+        quality.getStorage(testDate, cheese);
         List<AbstractFood> expected = quality.getStrategy().getAll();
         assertThat(expected, is(List.of(cheese)));
         assertTrue(cheese.isDiscount());
@@ -70,7 +70,7 @@ public class ControlQualityTest {
                 LocalDateTime.of(2021, 7, 1, 4, 0),
                 100);
         ControlQuality quality = new ControlQuality(testDate, cheese);
-        quality.getStorage(cheese);
+        quality.getStorage(testDate, cheese);
         float expected = 75f;
         assertThat(cheese.getPrice(), is(expected));
         assertTrue(cheese.isDiscount());
@@ -84,8 +84,24 @@ public class ControlQualityTest {
                 LocalDateTime.of(2021, 7, 1, 4, 0),
                 100);
         ControlQuality quality = new ControlQuality(testDate, cheese);
-        quality.getStorage(cheese);
+        quality.getStorage(testDate, cheese);
         List<AbstractFood> expected = quality.getStrategy().getAll();
         assertThat(expected, is(List.of(cheese)));
+    }
+
+    @Test
+    public void whenFirstGoToShopThenResortToTrash() {
+        LocalDateTime testDate = LocalDateTime.of(2021, 7, 4, 4, 0);
+        AbstractFood cheese = new Cheese("Gauda",
+                LocalDateTime.of(2021, 7, 10, 4, 0),
+                LocalDateTime.of(2021, 7, 1, 4, 0),
+                100);
+        ControlQuality quality = new ControlQuality(testDate, cheese);
+        quality.getStorage(testDate, cheese);
+        Depository before = quality.getStrategy();
+        quality.getStorage(quality.getResortDate(), cheese);
+        Depository after = quality.getStrategy();
+        assertTrue(before.getClass().getCanonicalName().contains("Shop"));
+        assertTrue(after.getClass().getCanonicalName().contains("Trash"));
     }
 }
