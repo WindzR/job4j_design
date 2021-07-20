@@ -5,11 +5,15 @@ import java.util.Objects;
 public class CitezenRF {
     private String name;
     private int age;
+    private int mobileNumber;
+    private String email;
     private double income;
 
-    public CitezenRF(String name, int age, double income) {
+    public CitezenRF(String name, int age, int mobileNumber, String email, double income) {
         this.name = name;
         this.age = age;
+        this.mobileNumber = mobileNumber;
+        this.email = email;
         this.income = income;
     }
 
@@ -27,6 +31,22 @@ public class CitezenRF {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public int getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(int mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public double getIncome() {

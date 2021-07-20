@@ -21,4 +21,10 @@ public class CitezensFilter {
                 .filter(c -> c.getAge() >= 18 && c.getAge() <= 55 && c.getIncome() >= 50000 && c.getIncome() <= 500000)
                 .collect(Collectors.toList());
     }
+
+    public List<CitezenRF> checkCitezensForHiring() {
+        return citizen.stream()
+                .filter(c -> c.getAge() >= 20 && c.getAge() <= 55)
+                .collect(Collectors.toList());
+    }
 }
